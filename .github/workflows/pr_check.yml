@@ -39,7 +39,7 @@ jobs:
           XML_PATH: ${{ inputs.xml_path }}
           block_merge: ${{ steps.PR_UTIL_CHECK.outputs.block-merge }}
         run: |
-          if $block_merge == "false"; then
+          if [ "$block_merge" == "false" ]; then
             python3 "${{ github.action_path }}/validate_artifacts.py"
           else
             echo "Skipping artifact consistency check because PR util check has failed. Please fix the issues."
