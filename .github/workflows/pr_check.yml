@@ -1,0 +1,47 @@
+name: Pull request checks
+
+on:
+  workflow_call:
+    inputs:
+      artifact_type:
+        required: true
+        type: string
+      xml_path:
+        required: false
+        type: string
+        default: "."
+      pr_check:
+        required: false
+        type: boolean
+        default: true
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the caller repository
+        uses: actions/checkout@v4
+
+      - name: Run PR checks
+        id: PR_UTIL_CHECK
+        if: ${{ inputs.pr_check }}
+        # uses: devsecops/prcheck-utils-action@main
+        run: |
+          echo "Running PR checks"
+          # Simulate a PR check result
+          echo "block-merge=false" >> $GITHUB_ENV
+
+      - name: Validate artifact consistency
+        id: artifact
+        shell: bash
+        env:
+          ARTIFACT_TYPE: ${{ inputs.artifact_type }}
+          XML_PATH: ${{ inputs.xml_path }}
+          block_merge: ${{ steps.PR_UTIL_CHECK.outputs['block-merge'] }}
+        run: |
+          if $block_merge == "false"; then
+            python3 "${{ github.action_path }}/validate_artifacts.py"
+          else
+            echo "Skipping artifact consistency check because PR util check has failed. Please fix the issues."
+            exit 1
+          fi

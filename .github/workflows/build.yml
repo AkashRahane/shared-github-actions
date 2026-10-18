@@ -1,0 +1,47 @@
+name: Build
+
+on:
+    workflow_call:
+        inputs:
+            artifact_type:
+                required: true
+                type: string
+            xml_path:
+                required: false
+                type: string
+                default: "."
+            pr_check:
+                required: false
+                type: boolean
+                default: true
+
+jobs:
+    pr_check:
+        if: ${{ inputs.pr_check }}
+        uses: ./.github/workflows/pr_check.yml
+        with:
+            artifact_type: ${{ inputs.artifact_type }}
+            xml_path: ${{ inputs.xml_path }}
+            pr_check: ${{ inputs.pr_check }}
+            
+    build-frontend:
+        if: ${{ inputs.artifact_type == 'frontend' }}
+        needs: pr_check
+        runs-on: ubuntu-latest
+        steps:
+            - name: Code Checkout
+              uses: actions/checkout@v4
+            
+            - name: Build frontend artifact
+              run: echo "building frontend"
+
+    build-backend:
+        if: ${{ inputs.artifact_type == 'backend' }}
+        needs: pr_check
+        runs-on: ubuntu-latest
+        steps:
+            - name: Code Checkout
+              uses: actions/checkout@v4
+            
+            - name: Build backend artifact
+              run: echo "building backend"
