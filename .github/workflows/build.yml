@@ -25,7 +25,7 @@ jobs:
             pr_check: ${{ inputs.pr_check }}
             
     build:
-        name: build ${{ inputs.artifact_type }} artifact
+        name: build artifact
         needs: pr_check
         runs-on: ubuntu-latest
         steps:
