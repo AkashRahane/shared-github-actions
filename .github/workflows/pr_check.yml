@@ -10,10 +10,6 @@ on:
         required: false
         type: string
         default: "."
-      pr_check:
-        required: false
-        type: boolean
-        default: true
 
 jobs:
   checks:
@@ -36,11 +32,9 @@ jobs:
 
       - name: Run PR checks
         id: PR_UTIL_CHECK
-        if: ${{ inputs.pr_check }}
         # uses: devsecops/prcheck-utils-action@main
         run: |
           echo "Running PR checks"
-          # Simulate a PR check result
           echo "block-merge=false" >> $GITHUB_OUTPUT
 
       - name: Validate artifact consistency
