@@ -20,10 +20,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out the caller repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Check out shared workflow scripts
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: AkashRahane/shared-github-actions
           ref: main
