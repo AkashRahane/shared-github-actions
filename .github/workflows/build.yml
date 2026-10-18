@@ -24,24 +24,21 @@ jobs:
             xml_path: ${{ inputs.xml_path }}
             pr_check: ${{ inputs.pr_check }}
             
-    build-frontend:
-        if: ${{ inputs.artifact_type == 'frontend' }}
+    build:
+        name: build ${{ inputs.artifact_type }} artifact
         needs: pr_check
         runs-on: ubuntu-latest
         steps:
             - name: Code Checkout
               uses: actions/checkout@v4
             
-            - name: Build frontend artifact
-              run: echo "building frontend"
-
-    build-backend:
-        if: ${{ inputs.artifact_type == 'backend' }}
-        needs: pr_check
-        runs-on: ubuntu-latest
-        steps:
-            - name: Code Checkout
-              uses: actions/checkout@v4
-            
-            - name: Build backend artifact
-              run: echo "building backend"
+            - name: Build
+              run: |
+                if [ "${{ inputs.artifact_type }}" == "backend" ]; then
+                    echo "Building backend artifact"
+                elif [ "${{ inputs.artifact_type }}" == "frontend" ]; then
+                    echo "Building frontend artifact"
+                else
+                    echo "Unknown artifact type: ${{ inputs.artifact_type }}"
+                    exit 1
+                fi
