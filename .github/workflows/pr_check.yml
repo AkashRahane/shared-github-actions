@@ -22,6 +22,11 @@ jobs:
       - name: Check out the caller repository
         uses: actions/checkout@v4
 
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
       - name: Run PR checks
         id: PR_UTIL_CHECK
         if: ${{ inputs.pr_check }}
@@ -40,7 +45,7 @@ jobs:
           block_merge: ${{ steps.PR_UTIL_CHECK.outputs.block-merge }}
         run: |
           if [ "$block_merge" == "false" ]; then
-            python3 "${{ github.action_path }}/validate_artifacts.py"
+            python3 ".github/scripts/validate_artifacts.py"
           else
             echo "Skipping artifact consistency check because PR util check has failed. Please fix the issues."
             exit 1
