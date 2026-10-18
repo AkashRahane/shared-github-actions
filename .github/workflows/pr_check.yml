@@ -29,7 +29,7 @@ jobs:
         run: |
           echo "Running PR checks"
           # Simulate a PR check result
-          echo "block-merge=false" >> $GITHUB_ENV
+          echo "block-merge=false" >> $GITHUB_OUTPUTS
 
       - name: Validate artifact consistency
         id: artifact
@@ -37,7 +37,7 @@ jobs:
         env:
           ARTIFACT_TYPE: ${{ inputs.artifact_type }}
           XML_PATH: ${{ inputs.xml_path }}
-          block_merge: ${{ steps.PR_UTIL_CHECK.outputs['block-merge'] }}
+          block_merge: ${{ steps.PR_UTIL_CHECK.outputs.block-merge }}
         run: |
           if $block_merge == "false"; then
             python3 "${{ github.action_path }}/validate_artifacts.py"
