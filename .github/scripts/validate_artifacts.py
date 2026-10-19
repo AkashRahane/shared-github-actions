@@ -100,7 +100,7 @@ def validate_frontend(xml_path):
 
 def main():
     artifact_type = os.getenv("ARTIFACT_TYPE")
-    xml_path = os.getenv("XML_PATH", "xyz")
+    xml_path = os.getenv("XML_PATH", ".")
 
     if not artifact_type:
         print(
